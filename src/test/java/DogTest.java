@@ -16,7 +16,7 @@ public class DogTest {
 
         List<String> actualFieldNames = getFieldNames(fields);
 
-        assertTrue(Arrays.asList("name", "breed")
+        assertTrue(Arrays.asList("name", "breed", "type", "weight", "size")
                 .containsAll(actualFieldNames));
     }
 

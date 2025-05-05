@@ -1,4 +1,4 @@
-public class Animal {
+public class Animal implements Eating{
 
     private String type;
     private Integer weight;
@@ -26,5 +26,10 @@ public class Animal {
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    @Override
+    public String eats() {
+        return "";
     }
 }

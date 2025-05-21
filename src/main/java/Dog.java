@@ -1,9 +1,14 @@
-
-
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 public class Dog extends Animal implements Locomotion{
 
+    @DefaultName("Solo")
     private String name;
+
+    @DefaultBreed("salsicha")
     private String breed;
 
     public Dog() {
@@ -11,7 +16,7 @@ public class Dog extends Animal implements Locomotion{
         this.breed = "vira-lata";
     }
 
-    public Dog(String name, String breed) throws Exception{
+    public Dog(String name, String breed) throws Exception {
         this.name = name;
         this.breed = breed;
     }
@@ -41,5 +46,17 @@ public class Dog extends Animal implements Locomotion{
     @Override
     public String eats() {
         return "meat";
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
+    public @interface DefaultName {
+        String value();
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
+    public @interface DefaultBreed {
+        String value();
     }
 }

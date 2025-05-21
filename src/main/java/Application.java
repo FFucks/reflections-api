@@ -1,3 +1,4 @@
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
@@ -8,32 +9,46 @@ public class Application {
      */
     public static void main(String[] args) throws Exception {
 
-        Class dog = Class.forName("Dog");
-        Method methodArr[] = dog.getDeclaredMethods();
+        annotationInjection();
+        verifyInstances();
+        verifyMethods();
+
+    }
+
+    public static void annotationInjection() throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        Dog dog = new Dog();
+        System.out.println("Dog Name: " + dog.getName());
+
+        InjectionAnnotation injectionAnnotation = new InjectionAnnotation();
+        injectionAnnotation.inject(dog);
+
+        Method method = Dog.class.getDeclaredMethod("getBreed");
+        method.setAccessible(true);
+
+        System.out.println("Dog Name after annotation: " + dog.getName());
+        System.out.println("Dog Breed after annotation: " + method.invoke(dog).toString());
+    }
+
+    public static void verifyInstances() throws Exception {
+        Class<?> dog = Class.forName("Dog");
 
         boolean isEqual = dog.isInstance(new Dog());
         boolean isEqualWithParameter = dog.isInstance(new Dog("Solo", "Daschung"));
 
         System.out.println(isEqual);
         System.out.println(isEqualWithParameter);
+    }
 
-        Method method = methodArr[0];
-        Class paramTypes[] = method.getParameterTypes();
-        Class returnType = method.getReturnType();
-        Class exceptionTypes[] = method.getExceptionTypes();
+    public static void verifyMethods() throws ClassNotFoundException {
+        Class<?> dog = Class.forName("Dog");
+        Method[] methodArr = dog.getDeclaredMethods();
 
-        Arrays.stream(paramTypes).forEach(System.out::println);
-        System.out.println("Return Type: " + returnType);
-        //System.out.println("Param Types: " + paramTypes[0]);
-
-
-        for (int count = 0; count < methodArr.length; count ++) {
-            System.out.println(methodArr[count].toString());
+        for (Method m : methodArr) {
+            System.out.println("Method name: " + m.getName());
+            System.out.println("Method parameter types" + Arrays.toString(m.getParameterTypes()));
+            System.out.println("Method return type" + m.getReturnType());
+            System.out.println("Method exceprion types:" + Arrays.toString(m.getExceptionTypes()));
+            System.out.println();
         }
-
-        //System.out.println(method[4].toString());
-
-
-
     }
 }
